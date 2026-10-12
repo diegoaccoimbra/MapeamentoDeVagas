@@ -47,8 +47,9 @@ public class Estacionamento
                     Vaga vaga = new Vaga(veiculo, localMatriz);
                     VagasOcupadas.Add(vaga);
 
-                    // Registra o veículo a um ticket
-                    Ticket ticket = new Ticket(veiculo.Placa, vaga, 3);
+                    // Registra o veículo a um ticket. Hora de entrada de 2:15 minutos atrás da hora atual
+                    DateTime horaEntrada = DateTime.Now.AddHours(-2).AddMinutes(-15);
+                    Ticket ticket = new Ticket(veiculo.Placa, vaga, horaEntrada);
                     Tickets.Add(veiculo.Placa, ticket);
 
                     return true;
@@ -79,9 +80,11 @@ public class Estacionamento
 
         if (ticketBuscado != null)
         {
-            ticketBuscado.HoraSaida = 5;
-
-            ticketBuscado.Valor *= ticketBuscado.HoraSaida - ticketBuscado.HoraEntrada;
+            // Calcula as horas cobradas a partir do tempo de permanência no estacionamento
+            ticketBuscado.HoraSaida = DateTime.Now;
+            TimeSpan permanencia = ticketBuscado.HoraSaida - ticketBuscado.HoraEntrada;
+            int horasCobradas = (int)Math.Ceiling(permanencia.TotalHours);
+            ticketBuscado.Valor *= horasCobradas;
             Console.WriteLine($"Total a pagar: R$ {ticketBuscado.Valor}");
 
             // Busca o veículo na lista de vagas ocupadas para liberar a vaga
