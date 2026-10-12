@@ -48,7 +48,7 @@ public class Estacionamento
                     VagasOcupadas.Add(vaga);
 
                     // Registra o veículo a um ticket
-                    Ticket ticket = new Ticket(veiculo.Placa, vaga, 3, 5);
+                    Ticket ticket = new Ticket(veiculo.Placa, vaga, 3);
                     Tickets.Add(veiculo.Placa, ticket);
 
                     return true;
@@ -79,6 +79,8 @@ public class Estacionamento
 
         if (ticketBuscado != null)
         {
+            ticketBuscado.HoraSaida = 5;
+
             ticketBuscado.Valor *= ticketBuscado.HoraSaida - ticketBuscado.HoraEntrada;
             Console.WriteLine($"Total a pagar: R$ {ticketBuscado.Valor}");
 
