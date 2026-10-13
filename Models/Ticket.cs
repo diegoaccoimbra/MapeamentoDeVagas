@@ -1,4 +1,4 @@
-namespace MapeamentoDeVagas;
+namespace MapeamentoDeVagas.Models;
 
 public class Ticket(string placaDoVeiculo, Vaga vagaOcupada, DateTime horaEntrada)
 {

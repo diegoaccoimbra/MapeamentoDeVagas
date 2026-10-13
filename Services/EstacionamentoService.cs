@@ -1,4 +1,5 @@
-namespace MapeamentoDeVagas;
+namespace MapeamentoDeVagas.Services;
+using MapeamentoDeVagas.Models;
 
 public class Estacionamento
 {
@@ -80,27 +81,8 @@ public class Estacionamento
 
         if (ticketBuscado != null)
         {
-            // Calcula as horas cobradas a partir do tempo de permanência no estacionamento
-            ticketBuscado.HoraSaida = DateTime.Now;
-            TimeSpan permanencia = ticketBuscado.HoraSaida - ticketBuscado.HoraEntrada;
-            int horasCobradas = (int)Math.Ceiling(permanencia.TotalHours);
-            ticketBuscado.Valor *= horasCobradas;
-            Console.WriteLine($"Total a pagar: R$ {ticketBuscado.Valor}");
-
-            // Busca o veículo na lista de vagas ocupadas para liberar a vaga
-            for (int i = 0; i < VagasOcupadas.Count; i++)
-            {
-                if (VagasOcupadas[i].VeiculoEstacionado.Placa == veiculo.Placa)
-                {
-                    // Liberando a vaga no mapa
-                    int linhaDaVaga = VagasOcupadas[i].LocalNaMatriz[0];
-                    int colunaDaVaga = VagasOcupadas[i].LocalNaMatriz[1];
-                    Mapa[linhaDaVaga, colunaDaVaga] = "L";
-
-                    //VagasOcupadas[i].Status = false;
-                    VagasOcupadas.Remove(VagasOcupadas[i]);
-                }
-            }
+            CalcularValor(ticketBuscado);
+            LiberarVaga(veiculo.Placa);
         }
         else
         {
@@ -116,5 +98,34 @@ public class Estacionamento
             return ticket;
         }
         return null;
+    }
+
+    public decimal CalcularValor(Ticket ticket)
+    {
+        // Calcula as horas cobradas a partir do tempo de permanência no estacionamento
+        ticket.HoraSaida = DateTime.Now;
+        TimeSpan permanencia = ticket.HoraSaida - ticket.HoraEntrada;
+        int horasCobradas = (int)Math.Ceiling(permanencia.TotalHours);
+        ticket.Valor *= horasCobradas;
+        Console.WriteLine($"Total a pagar: R$ {ticket.Valor}");
+        return ticket.Valor;
+    }
+
+    public void LiberarVaga(string placa)
+    {
+        // Busca o veículo na lista de vagas ocupadas para liberar a vaga
+        for (int i = 0; i < VagasOcupadas.Count; i++)
+        {
+            if (VagasOcupadas[i].VeiculoEstacionado.Placa == placa)
+            {
+                // Liberando a vaga no mapa
+                int linhaDaVaga = VagasOcupadas[i].LocalNaMatriz[0];
+                int colunaDaVaga = VagasOcupadas[i].LocalNaMatriz[1];
+                Mapa[linhaDaVaga, colunaDaVaga] = "L";
+
+                //VagasOcupadas[i].Status = false;
+                VagasOcupadas.Remove(VagasOcupadas[i]);
+            }
+        }
     }
 }

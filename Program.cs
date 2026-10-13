@@ -1,4 +1,5 @@
-﻿using MapeamentoDeVagas;
+﻿using MapeamentoDeVagas.Models;
+using MapeamentoDeVagas.Services;
 
 Estacionamento MeuEstacionamento = new Estacionamento(5, 6);
 Veiculo MeuToyota = new Veiculo("ABC123", "carro");
