@@ -6,4 +6,4 @@ Estacionamentos modernos utilizam sensores para gerenciar em tempo real quais va
 ## 🛠️ Funcionalidades Principais
 * **Estacionar:** Recebe um veículo e encontra automaticamente a vaga mais próxima da entrada.
 * **Consultar Vagas:** Exibe o mapa no terminal mostrando vagas livres (`[ L ]`) e ocupadas (`[ X ]`).
-* **Checkout:** Procura o veículo pela placa via Dicionário, calcula o tempo decorrido, aplica a tarifa do tipo de vaga e libera a posição na matriz.
+* **Check-out:** Procura o veículo pela placa via Dicionário, calcula o tempo decorrido, aplica a tarifa do tipo de vaga e libera a posição na matriz.

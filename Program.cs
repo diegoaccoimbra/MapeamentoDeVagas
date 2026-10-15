@@ -13,8 +13,8 @@ MeuEstacionamento.ConsultarVagas();
 Console.WriteLine(MeuEstacionamento.Estacionar(MeuChevy));
 MeuEstacionamento.ConsultarVagas();
 
-// Checkout do primeiro carro
-MeuEstacionamento.Checkout(MeuToyota);
+// Check-out do primeiro carro
+MeuEstacionamento.CheckOut(MeuToyota);
 MeuEstacionamento.ConsultarVagas();
 
 // Estacionando mais um

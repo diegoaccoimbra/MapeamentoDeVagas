@@ -1,13 +1,7 @@
 namespace MapeamentoDeVagas.Models;
 
-public class Veiculo
+public class Veiculo(string placa, string tipo)
 {
-    public string Placa {get; set;}
-    public string Tipo {get; set;}
-    
-    public Veiculo(string placa, string tipo)
-    {
-        Placa = placa;
-        Tipo = tipo;
-    }
+    public string Placa {get; set;} = placa;
+    public string Tipo {get; set;} = tipo;
 }

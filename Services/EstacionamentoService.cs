@@ -3,9 +3,8 @@ using MapeamentoDeVagas.Models;
 
 public class Estacionamento
 {
-    string[,] Mapa {get; set;}
+    Vaga[,] Mapa {get; set;}
     Dictionary<string, Ticket> Tickets {get; set;}
-    List<Vaga> VagasOcupadas {get; set;}
     int Linha {get; set;}
     int Coluna {get; set;}
 
@@ -14,15 +13,14 @@ public class Estacionamento
     {
         Linha = linha;
         Coluna = coluna;
-        Mapa = new string [Linha, Coluna];
+        Mapa = new Vaga[Linha, Coluna];
         Tickets = new Dictionary<string, Ticket>();
-        VagasOcupadas = new List<Vaga>();
 
         for (int i = 0; i < Linha; i++)
         {
             for (int j = 0; j < Coluna; j++)
             {
-                Mapa[i, j] = "L";
+                Mapa[i, j] = new Vaga();
             }
         }
     }
@@ -30,27 +28,19 @@ public class Estacionamento
     // Estaciona o veículo na vaga mais próxima da entrada
     public bool Estacionar(Veiculo veiculo)
     {
-        int[] localMatriz = new int [2];
-
         // Marca a vaga no mapa e adiciona o veículo à vaga
         for (int i = 0; i < Linha; i++)
         {
             for (int j = 0; j < Coluna; j++)
             {
-                if (Mapa[i, j] == "L")
+                if (Mapa[i, j].Status == false)
                 {   
-                    // Marca a vaga no mapa
-                    Mapa[i, j] = "X";
-
-                    // Adiciona o veículo à vaga
-                    localMatriz[0] = i;
-                    localMatriz[1] = j;
-                    Vaga vaga = new Vaga(veiculo, localMatriz);
-                    VagasOcupadas.Add(vaga);
+                    // Adiciona o veículo à vaga (muda status pra true)
+                    Mapa[i, j].Ocupar();
 
                     // Registra o veículo a um ticket. Hora de entrada de 2:15 minutos atrás da hora atual
                     DateTime horaEntrada = DateTime.Now.AddHours(-2).AddMinutes(-15);
-                    Ticket ticket = new Ticket(veiculo.Placa, vaga, horaEntrada);
+                    Ticket ticket = new Ticket(veiculo.Placa, Mapa[i, j], horaEntrada);
                     Tickets.Add(veiculo.Placa, ticket);
 
                     return true;
@@ -68,21 +58,29 @@ public class Estacionamento
         {
             for (int j = 0; j < Coluna; j++)
             {
-                Console.Write($"[{Mapa[i, j]}] ");
+                if (Mapa[i, j].Status == true)
+                {
+                    Console.Write($"[X] ");
+                }
+                else
+                {
+                    Console.Write($"[L] ");
+                }
             }
             Console.Write("\n");
         }
     }
 
     // Procura o ticket do veículo pela placa via Dicionário, calcula o tempo decorrido e libera a posição na matriz
-    public void Checkout(Veiculo veiculo)
+    public void CheckOut(Veiculo veiculo)
     {
         Ticket? ticketBuscado = BuscarVeiculo(veiculo.Placa);
 
         if (ticketBuscado != null)
         {
             CalcularValor(ticketBuscado);
-            LiberarVaga(veiculo.Placa);
+            Vaga vagaOcupada = ticketBuscado.VagaOcupada;
+            vagaOcupada.Liberar();
         }
         else
         {
@@ -107,25 +105,9 @@ public class Estacionamento
         TimeSpan permanencia = ticket.HoraSaida - ticket.HoraEntrada;
         int horasCobradas = (int)Math.Ceiling(permanencia.TotalHours);
         ticket.Valor *= horasCobradas;
+        
         Console.WriteLine($"Total a pagar: R$ {ticket.Valor}");
+        
         return ticket.Valor;
-    }
-
-    public void LiberarVaga(string placa)
-    {
-        // Busca o veículo na lista de vagas ocupadas para liberar a vaga
-        for (int i = 0; i < VagasOcupadas.Count; i++)
-        {
-            if (VagasOcupadas[i].VeiculoEstacionado.Placa == placa)
-            {
-                // Liberando a vaga no mapa
-                int linhaDaVaga = VagasOcupadas[i].LocalNaMatriz[0];
-                int colunaDaVaga = VagasOcupadas[i].LocalNaMatriz[1];
-                Mapa[linhaDaVaga, colunaDaVaga] = "L";
-
-                //VagasOcupadas[i].Status = false;
-                VagasOcupadas.Remove(VagasOcupadas[i]);
-            }
-        }
     }
 }

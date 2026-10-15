@@ -1,17 +1,16 @@
 namespace MapeamentoDeVagas.Models;
 
-public class Vaga
+public class Vaga()
 {
-    public bool Status {get; set;}
-    public Veiculo VeiculoEstacionado {get; set;}
-    public string Tipo {get; set;}
-    public int[] LocalNaMatriz {get; set;}
+    public bool Status {get; set;} = false;
 
-    public Vaga (Veiculo veiculoEstacionado, int[] localNaMatriz)
+    public void Ocupar()
     {
-        VeiculoEstacionado = veiculoEstacionado;
-        LocalNaMatriz = localNaMatriz;
-        Tipo = veiculoEstacionado.Tipo;
         Status = true;
+    }
+
+    public void Liberar()
+    {
+        Status = false;
     }
 }
