@@ -25,6 +25,20 @@ public class Estacionamento
         }
     }
 
+    public bool CheckIn(Veiculo veiculo)
+    {
+        // Verifica se já há um ticket para esse veículo, ou seja, se o veículo já está estacionado
+        Ticket? ticketBuscado = BuscarVeiculo(veiculo.Placa);
+        
+        if (ticketBuscado == null)
+        {
+            Estacionar(veiculo);
+            return true;
+        }
+        Console.WriteLine($"Este veículo já está estacionado na vaga {ticketBuscado.VagaOcupada}");
+        return false;
+    }
+
     // Estaciona o veículo na vaga mais próxima da entrada
     public bool Estacionar(Veiculo veiculo)
     {
@@ -38,7 +52,9 @@ public class Estacionamento
                     // Adiciona o veículo à vaga (muda status pra true)
                     Mapa[i, j].Ocupar();
 
-                    // Registra o veículo a um ticket. Hora de entrada de 2:15 minutos atrás da hora atual
+                    // Registra o veículo a um ticket. 
+                    // DateTime horaEntrada = DateTime.Now;
+                    // Teste com a hora de entrada de 2:15 minutos atrás da hora atual
                     DateTime horaEntrada = DateTime.Now.AddHours(-2).AddMinutes(-15);
                     Ticket ticket = new Ticket(veiculo.Placa, Mapa[i, j], horaEntrada);
                     Tickets.Add(veiculo.Placa, ticket);
@@ -78,9 +94,10 @@ public class Estacionamento
 
         if (ticketBuscado != null)
         {
-            CalcularValor(ticketBuscado);
+            ticketBuscado.HoraSaida = DateTime.Now;
             Vaga vagaOcupada = ticketBuscado.VagaOcupada;
             vagaOcupada.Liberar();
+            Console.WriteLine($"Total a pagar: R$ {CalcularValor(ticketBuscado)}");
         }
         else
         {
@@ -101,13 +118,11 @@ public class Estacionamento
     public decimal CalcularValor(Ticket ticket)
     {
         // Calcula as horas cobradas a partir do tempo de permanência no estacionamento
-        ticket.HoraSaida = DateTime.Now;
         TimeSpan permanencia = ticket.HoraSaida - ticket.HoraEntrada;
         int horasCobradas = (int)Math.Ceiling(permanencia.TotalHours);
-        ticket.Valor *= horasCobradas;
         
-        Console.WriteLine($"Total a pagar: R$ {ticket.Valor}");
+        decimal valorTotal = ticket.Tarifa * horasCobradas;
         
-        return ticket.Valor;
+        return valorTotal;
     }
 }

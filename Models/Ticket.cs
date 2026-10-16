@@ -6,5 +6,5 @@ public class Ticket(string placaDoVeiculo, Vaga vagaOcupada, DateTime horaEntrad
     public Vaga VagaOcupada {get; set;} = vagaOcupada;
     public DateTime HoraEntrada {get; set;} = horaEntrada;
     public DateTime HoraSaida {get; set;} = horaEntrada;
-    public decimal Valor {get; set;} = 5;
+    public decimal Tarifa {get; set;} = 5;
 }

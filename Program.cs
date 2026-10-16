@@ -8,15 +8,18 @@ Veiculo MeuFord = new Veiculo("XYZ489", "carro");
 
 MeuEstacionamento.ConsultarVagas();
 // Estacionando os carros
-Console.WriteLine(MeuEstacionamento.Estacionar(MeuToyota));
+Console.WriteLine(MeuEstacionamento.CheckIn(MeuToyota));
 MeuEstacionamento.ConsultarVagas();
-Console.WriteLine(MeuEstacionamento.Estacionar(MeuChevy));
+Console.WriteLine(MeuEstacionamento.CheckIn(MeuChevy));
 MeuEstacionamento.ConsultarVagas();
+
+// Tentando estacionar o mesmo carro
+Console.WriteLine(MeuEstacionamento.CheckIn(MeuToyota));
 
 // Check-out do primeiro carro
 MeuEstacionamento.CheckOut(MeuToyota);
 MeuEstacionamento.ConsultarVagas();
 
 // Estacionando mais um
-Console.WriteLine(MeuEstacionamento.Estacionar(MeuFord));
+Console.WriteLine(MeuEstacionamento.CheckIn(MeuFord));
 MeuEstacionamento.ConsultarVagas();
