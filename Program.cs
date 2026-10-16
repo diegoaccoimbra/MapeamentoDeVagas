@@ -17,9 +17,13 @@ MeuEstacionamento.ConsultarVagas();
 Console.WriteLine(MeuEstacionamento.CheckIn(MeuToyota));
 
 // Check-out do primeiro carro
-MeuEstacionamento.CheckOut(MeuToyota);
+Console.WriteLine($"Valor a ser pago: R$ {MeuEstacionamento.CheckOut(MeuToyota)}");
 MeuEstacionamento.ConsultarVagas();
 
 // Estacionando mais um
 Console.WriteLine(MeuEstacionamento.CheckIn(MeuFord));
+MeuEstacionamento.ConsultarVagas();
+
+// Estacionando o mesmo carro depois de fazer check-out
+Console.WriteLine(MeuEstacionamento.CheckIn(MeuToyota));
 MeuEstacionamento.ConsultarVagas();

@@ -2,7 +2,7 @@ namespace MapeamentoDeVagas.Models;
 
 public class Vaga()
 {
-    public bool Status {get; set;} = false;
+    public bool Status {get; private set;} = false;
 
     public void Ocupar()
     {

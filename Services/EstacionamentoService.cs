@@ -35,7 +35,7 @@ public class Estacionamento
             Estacionar(veiculo);
             return true;
         }
-        Console.WriteLine($"Este veículo já está estacionado na vaga {ticketBuscado.VagaOcupada}");
+        //Console.WriteLine($"Este veículo já está estacionado");
         return false;
     }
 
@@ -66,7 +66,6 @@ public class Estacionamento
         return false;
     }
     
-
     // Exibe o mapa do estacionamento com vagas livres (L) e ocupadas (X)
     public void ConsultarVagas()
     {
@@ -87,21 +86,29 @@ public class Estacionamento
         }
     }
 
-    // Procura o ticket do veículo pela placa via Dicionário, calcula o tempo decorrido e libera a posição na matriz
-    public void CheckOut(Veiculo veiculo)
+    // Procura o ticket do veículo pela placa via Dicionário e calcula o valor total a ser pago
+    public decimal? CheckOut(Veiculo veiculo)
     {
         Ticket? ticketBuscado = BuscarVeiculo(veiculo.Placa);
 
         if (ticketBuscado != null)
         {
+            // Registra a hora de saída do veículo
             ticketBuscado.HoraSaida = DateTime.Now;
+            // Calcula o valor total a ser pago
+            decimal valorTotal = CalcularValor(ticketBuscado);
+            // Libera a vaga ocupada
             Vaga vagaOcupada = ticketBuscado.VagaOcupada;
             vagaOcupada.Liberar();
-            Console.WriteLine($"Total a pagar: R$ {CalcularValor(ticketBuscado)}");
+            // Remove o ticket do dicionário de tickets
+            Tickets.Remove(veiculo.Placa);
+            //Console.WriteLine($"Total a pagar: R$ {CalcularValor(ticketBuscado)}");
+            return  valorTotal;
         }
         else
         {
-            Console.WriteLine("Nenhum carro estacionado possui essa placa");    
+            //Console.WriteLine("Nenhum carro estacionado possui essa placa");    
+            return null;
         }
     }
 
